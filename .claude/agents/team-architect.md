@@ -65,7 +65,7 @@ Use Bash to create the complete directory structure based on Phase 1 and Phase 2
 
 Invoke writers in this sequence to ensure correct reference chains:
 1. **`rule-writer` first** — Rules are the behavioral foundation for all agents and skills
-2. **`skill-writer` second** — Agent prompts need to reference available skills. Provide the External Skills Discovery section from Phase 2 so the Skill Writer knows which skills to install (Pattern A/B) and which to use as reference (Pattern C).
+2. **`skill-writer` second** — Agent prompts need to reference available skills. Provide the External Skills Discovery section from Phase 2 so the Skill Writer knows which skills to install (Pattern A/B) and which to use as reference (Pattern C). **All custom skills must be created using the `/skill-creator` flow** (write → test → eval → iterate → description optimization). The Skill Writer knows this process — do not instruct it to hand-write SKILL.md files directly.
 3. **`agent-writer` last** — Agent prompts need to reference skills and rules. Provide the Origin column from the Agent-Skill-Rule Mapping Table so each agent's Available Skills section correctly marks external vs custom skills.
 
 Provide each writer with the complete context from Phase 1 and Phase 2.

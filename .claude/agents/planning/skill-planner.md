@@ -105,6 +105,8 @@ Define for each skill:
 - List of agents using this skill
 - Origin: Custom / External (with source URL and integration pattern)
 
+**Note**: All custom skills will be implemented by Skill Writer using the `/skill-creator` flow (write → test → eval → iterate). The skeleton here serves as input to that process, not as the final SKILL.md content.
+
 ### Step 5: Consider Deployment Mode
 
 If the team targets Agent Teams mode:
