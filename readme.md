@@ -2,13 +2,12 @@
 
 A-Team is a multi-agent team designer. It interviews the user, decomposes responsibilities, plans skills and rules, and generates ready-to-run team structures.
 
-This repository now ships with a **Codex-native runtime layer**:
+This repository supports **dual-platform** operation:
 
-- `AGENTS.md` for the project entrypoint
-- `.codex/` for prompts, rules, config, and authored skills
-- `.agents/skills/` for runtime-discoverable Codex skills
+- **Claude Code**: `CLAUDE.md` + `.claude/` (agents, skills, rules)
+- **Codex**: `AGENTS.md` + `.codex/` + `.agents/skills/`
 
-The original `.claude/` tree is kept as the **legacy/source design** and migration reference.
+Each platform has its own native configuration. Format conversion between platforms is also supported.
 
 ---
 
@@ -28,32 +27,26 @@ and turns it into:
 - grouped specialist roles
 - reusable skills
 - hard rules
-- a Codex-ready team folder under `teams/{team-name}/`
+- a ready-to-use team folder under `teams/{team-name}/`
 
 ### Dual-Platform Generation
 
-A-Team now supports **dual-platform team generation**:
+A-Team supports **dual-platform team generation**:
 
-- Codex-native generation
-- Claude-compatible delivery planning
-- dual-format planning for teams that may need both runtimes
+- **Claude Code native generation**: produces `CLAUDE.md` + `.claude/` structure
+- **Codex native generation**: produces `AGENTS.md` + `.codex/` + `.agents/skills/` structure
+- **Dual-format**: generates both platform formats in one pass
 
-The important constraint is that **Codex remains the canonical authored format**. During discovery, A-Team asks which delivery format the user wants. Even if the user wants Claude compatibility, A-Team generates the Codex package first and preserves mapping for later conversion.
+During discovery, A-Team asks which delivery format the user wants and generates the corresponding native structure directly.
 
 ### Format Conversion Support
 
-A-Team also supports **future format conversion** between Codex and Claude-style team layouts.
+A-Team also supports **format conversion** between Codex and Claude Code team layouts.
 
-For each generated team, A-Team retains:
+Supported conversion flows:
 
-- `.codex/docs/format-mapping.md` for human-readable bidirectional mapping
-- `.codex/docs/format-mapping.manifest.yaml` for machine-readable artifact mapping
-
-This makes these flows possible:
-
-- Claude -> Codex import into the canonical Codex layout
-- Codex -> Claude export from the canonical Codex layout
-- dual-format delivery where Codex is authored first and Claude-compatible output is derived afterward
+- **Claude Code → Codex**: convert an existing Claude Code team to Codex format
+- **Codex → Claude Code**: convert an existing Codex team to Claude Code format
 
 ### Codex Quick Start
 
@@ -130,7 +123,7 @@ Do not rely on `.codex/skills/` alone if you want Codex to auto-discover project
 │   └── docs/
 ├── .agents/
 │   └── skills/
-├── .claude/                 # legacy/source design
+├── .claude/                 # Claude Code native config
 └── teams/
 ```
 
@@ -168,20 +161,18 @@ teams/{team-name}/
     └── skills/
 ```
 
-### Migration Notes
+### Platform Mapping
 
-`CLAUDE.md` and `.claude/` were not deleted. They remain the source implementation and migration baseline.
+Both platforms coexist in this repo, each with its own native configuration:
 
-The platform mapping is bidirectional:
-
-| Claude layout | Codex layout | Direction |
+| Claude Code | Codex | Notes |
 | --- | --- | --- |
-| `CLAUDE.md` | `AGENTS.md` | Bidirectional |
-| `.claude/agents/` | `.codex/agents/` | Bidirectional |
-| `.claude/rules/` | `.codex/rules/` | Bidirectional |
-| `.claude/skills/` | `.codex/skills/` + `.agents/skills/` | Bidirectional with runtime mirroring |
+| `CLAUDE.md` | `AGENTS.md` | Project entrypoint |
+| `.claude/agents/` | `.codex/agents/` | Agent definitions |
+| `.claude/rules/` | `.codex/rules/` | Rule definitions |
+| `.claude/skills/` | `.codex/skills/` + `.agents/skills/` | Skills (Codex has runtime mirror) |
 
-See `.codex/docs/claude-to-codex-mapping.md` for the conversion model and retained mapping artifact design.
+Format conversion between the two is supported in both directions.
 
 ---
 
@@ -205,28 +196,20 @@ A-Team 不是最終要執行工作的 agent team，本身是**用來設計 agent
 
 ### 支援雙平台生成
 
-A-Team 現在支援**雙平台團隊生成**：
+A-Team 支援**雙平台團隊生成**：
 
-- 直接生成 Codex-native 團隊
-- 規劃 Claude-compatible 交付
-- 規劃同時面向兩邊 runtime 的 dual-format 輸出
+- **Claude Code 原生生成**：產出 `CLAUDE.md` + `.claude/` 結構
+- **Codex 原生生成**：產出 `AGENTS.md` + `.codex/` + `.agents/skills/` 結構
+- **Dual-format**：一次同時產出兩個平台的格式
 
-但有一個核心原則：**Codex 永遠是 canonical authored format**。A-Team 會在 discovery 階段先問使用者要哪一種團隊格式；即使使用者要 Claude 相容格式，也會先把 Codex 套件生出來，再保留 mapping 供後續轉換。
+A-Team 會在 discovery 階段詢問使用者要哪一種團隊格式，直接生成對應的原生結構。
 
 ### 支援格式轉換
 
-A-Team 也支援 **Codex 與 Claude 團隊格式之間的後續轉換**。
+A-Team 也支援 **Codex 與 Claude Code 團隊格式之間的互相轉換**：
 
-每個生成團隊都會保留：
-
-- `.codex/docs/format-mapping.md`：給人看的雙向 mapping 說明
-- `.codex/docs/format-mapping.manifest.yaml`：給工具或流程用的 machine-readable artifact mapping
-
-因此可以支援：
-
-- Claude -> Codex 匯入到 canonical Codex 結構
-- Codex -> Claude 從 canonical Codex 結構匯出
-- dual-format 交付，先寫 Codex，再導出 Claude-compatible 版本
+- **Claude Code → Codex**：把現有 Claude Code 團隊轉成 Codex 格式
+- **Codex → Claude Code**：把現有 Codex 團隊轉成 Claude Code 格式
 
 ### Codex 快速開始
 
@@ -303,7 +286,7 @@ Codex runtime 會從 `.agents/skills/` 掃描 project skills，所以這裡分�
 │   └── docs/
 ├── .agents/
 │   └── skills/
-├── .claude/                 # 保留作為 legacy/source 設計
+├── .claude/                 # Claude Code 原生設定
 └── teams/
 ```
 
@@ -339,21 +322,15 @@ teams/{team-name}/
     └── skills/
 ```
 
-### 舊版 Claude 結構還在嗎
+### 雙平台對照
 
-還在。
+兩個平台各自有原生設定，共存於此 repo：
 
-- `CLAUDE.md` / `.claude/` 沒有刪掉
-- 它們現在是 legacy/source implementation
-- Codex 版則由 `AGENTS.md`、`.codex/`、`.agents/skills/` 承接
-
-這個對照現在是雙向保留的：
-
-| Claude 版 | Codex 版 | 方向 |
+| Claude Code | Codex | 說明 |
 | --- | --- | --- |
-| `CLAUDE.md` | `AGENTS.md` | 雙向 |
-| `.claude/agents/` | `.codex/agents/` | 雙向 |
-| `.claude/rules/` | `.codex/rules/` | 雙向 |
-| `.claude/skills/` | `.codex/skills/` + `.agents/skills/` | 雙向，外加 runtime mirror |
+| `CLAUDE.md` | `AGENTS.md` | 專案入口 |
+| `.claude/agents/` | `.codex/agents/` | Agent 定義 |
+| `.claude/rules/` | `.codex/rules/` | Rule 定義 |
+| `.claude/skills/` | `.codex/skills/` + `.agents/skills/` | Skills（Codex 有 runtime mirror） |
 
-更完整的對照與轉換策略請看 `.codex/docs/claude-to-codex-mapping.md`。
+兩個方向的格式轉換皆有支援。
