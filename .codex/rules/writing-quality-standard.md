@@ -33,7 +33,7 @@ Do not use vague phrases unless followed by explicit criteria:
 
 ### Keep Files Tight
 
-- one agent prompt: 260 lines maximum
+- one agent config or `developer_instructions` block: 260 lines maximum
 - one skill doc: 200 lines maximum
 - one rule doc: 100 lines maximum
 - if a file exceeds the limit, split it or move detail into references

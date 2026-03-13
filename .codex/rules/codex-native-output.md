@@ -25,6 +25,7 @@ The source of truth for generated teams is the Codex package:
 
 - `AGENTS.md`
 - `.codex/`
+- `agents/`
 - `.agents/skills/`
 
 Write this package first even when the user signals future Claude compatibility needs. Do not treat `.claude/` as the authored output surface during normal generation.

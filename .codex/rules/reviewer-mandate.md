@@ -38,15 +38,15 @@ The process reviewer must produce a retrospective report with:
 
 ### Placement
 
-Place the process reviewer in a dedicated group such as `.codex/agents/review/` or `.codex/agents/quality/`. Do not place it in the same group as the workers it audits.
+Give the process reviewer its own agent id and config file under `agents/`. Do not merge it into a worker config or reuse a worker `developer_instructions` block for review duties.
 
 ## Violation Determination
 
 - No process reviewer exists -> Violation
 - The reviewer prompt focuses on deliverable QA instead of process quality -> Violation
-- The reviewer lives in the same execution group as the workers it reviews -> Violation
+- The reviewer shares one config file or one agent registration with a worker it reviews -> Violation
 - The reviewer prompt lacks evaluation dimensions or report format -> Violation
 
 ## Exceptions
 
-- If the generated team has three or fewer total agents, the coordinator may absorb process review duties, but that secondary responsibility must be written explicitly in the coordinator prompt.
+- If the generated team has three or fewer total agents, the coordinator may absorb process review duties, but that secondary responsibility must be written explicitly in the coordinator instructions.

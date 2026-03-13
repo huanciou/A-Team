@@ -1,23 +1,31 @@
 ---
 name: Coordinator Mandate
-description: Require one non-executing coordinator in every generated team
+description: Require one non-executing coordinator in every generated multi-agent team
 ---
 
 # Coordinator Mandate
 
 ## Applicability
 
-- Applies to: all generated teams and all A-Team writers
+- Applies to: all generated `multi-agent` teams and all A-Team writers
 
 ## Rule Content
 
 ### Coordinator Must Exist
 
-Every generated team must include one coordinator prompt at `.codex/agents/{coordinator}.md`. The coordinator is the only role allowed at the root of `.codex/agents/`.
+Every generated `multi-agent` team must include one coordinator agent registration in `teams/{team-name}/.codex/config.toml` and one matching config file under `teams/{team-name}/agents/`.
+
+Recommended shape:
+
+```toml
+[agents.coordinator]
+description = "Coordinate delegation, follow-ups, and final synthesis."
+config_file = "agents/coordinator.toml"
+```
 
 ### Coordinator Does Not Execute
 
-The coordinator may plan, assign, track, follow up, resolve dependencies, and enforce quality gates. The coordinator must not absorb delivery work that belongs to specialist agents.
+The coordinator may plan, assign, track, follow up, resolve dependencies, and enforce quality gates. The coordinator must not absorb delivery work that belongs to specialist agents. Its `developer_instructions` must stay coordination-only.
 
 ### Flat Architecture Only
 
@@ -25,10 +33,11 @@ Use one coordinator with direct specialists. Do not add sub-coordinators. In Cod
 
 ## Violation Determination
 
-- No coordinator file exists at `.codex/agents/` root -> Violation
-- The coordinator prompt contains production work in its Responsibilities section -> Violation
+- No coordinator registration exists in `.codex/config.toml` for a `multi-agent` team -> Violation
+- The coordinator `config_file` path does not resolve under `agents/` -> Violation
+- The coordinator `developer_instructions` contain production work instead of coordination work -> Violation
 - A second coordinator exists only to relay tasks between the main coordinator and workers -> Violation
 
 ## Exceptions
 
-This rule has no exceptions.
+Single-agent teams do not require a coordinator registration.

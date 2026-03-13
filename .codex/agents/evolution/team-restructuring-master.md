@@ -31,7 +31,8 @@ Read:
 - `AGENTS.md`
 - `.codex/docs/format-mapping.md`
 - `.codex/docs/format-mapping.manifest.yaml`
-- `.codex/agents/**/*.md`
+- `.codex/config.toml`
+- `agents/**/*.toml`
 - `.codex/skills/**/SKILL.md`
 - `.agents/skills/**/SKILL.md`
 - `.codex/rules/**/*.md`

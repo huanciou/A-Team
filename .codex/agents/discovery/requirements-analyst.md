@@ -52,8 +52,9 @@ Explore these dimensions:
 
 ### 6. Execution Mode And Parallelism
 
-- **Environment detection first**: Before discussing execution mode options, read `~/.claude/settings.json` to check if `env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is enabled, and read `~/.codex/config.toml` to check if `[features] multi_agent = true`. If the target project path is known, also note whether it already has a `.codex/` directory. Report the detected capabilities, checked paths, and missing settings to the user so they can make an informed choice.
-- should the team run mostly inline (`single-agent`) or with spawned specialists (`multi-agent`). Inform the user which modes their current environment supports.
+- if the target project path is known, inspect `{project}/.codex/config.toml`, `{project}/AGENTS.md`, and `{project}/agents/` first
+- report whether the target project already has Codex config, existing agent registrations, or path collisions that will affect generation
+- should the team run mostly inline (`single-agent`) or with spawned specialists (`multi-agent`)
 - which work can run in parallel without stepping on the same files
 - which tasks need explicit follow-up instructions after the first delegation
 
@@ -62,6 +63,7 @@ Explore these dimensions:
 - stack restrictions
 - output format requirements
 - granularity preference
+- whether the generated Codex package must be project-local and self-contained
 
 ## Output Format
 
@@ -109,9 +111,10 @@ Produce:
 - Rationale: {why}
 
 ## Environment Readiness
-- Claude Code: {ready / not ready / unknown} via `~/.claude/settings.json`
-- Codex: {ready / not ready / unknown} via `~/.codex/config.toml`
-- Target project `.codex/`: {present / absent / unknown}
+- Target project path: {known / unknown}
+- Project `.codex/config.toml`: {present / absent / generated in this run / unknown}
+- Existing `agents/` directory: {present / absent / unknown}
+- Merge or conflict notes: ...
 
 ## Parallelism Analysis
 - Parallel groups: ...

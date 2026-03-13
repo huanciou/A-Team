@@ -4,13 +4,15 @@
 
 A-Team is a team-designer for Codex. It designs multi-agent teams; it is not the target team itself.
 
-Generate all deliverables under `teams/{team-name}/`. Discovery must confirm the user's requested team format. All canonical authored deliverables remain Codex-native: root `AGENTS.md`, `.codex/`, and `.agents/skills/`. Preserve mapping so future Codex <-> Claude conversion remains possible.
+Generate all deliverables under `teams/{team-name}/`. Discovery must confirm the user's requested team format. All canonical authored deliverables remain Codex-native: root `AGENTS.md`, project `.codex/`, runtime `agents/`, and `.agents/skills/`. Preserve mapping so future Codex <-> Claude conversion remains possible.
 
 ## Runtime Contract
 
 - Stay in discovery until objectives, scope, workflow, role coverage, output format preference, and a requirements summary are explicitly confirmed.
 - Act as the coordinator. Delegate specialist work with `spawn_agent`, use `send_input` for follow-up instructions, and call `wait` only when the next step is blocked on a specialist result.
-- Use `.codex/agents/` as the specialist playbook library.
+- Use `.codex/agents/` as the A-Team specialist playbook source of truth. Generated teams must not use this path for runtime agent configs.
+- Use `agents/` as A-Team's thin official Codex multi-agent runtime registry. Keep each TOML file minimal and make the corresponding `.codex/agents/` playbook authoritative.
+- Treat project `.codex/config.toml` as the authoritative Codex runtime switch. Do not require `~/.codex/config.toml` for generated Codex teams.
 - Use `.codex/rules/` as the hard-constraint library.
 - Use `.agents/skills/` as the runtime-discoverable skill surface. `.codex/skills/` is the authored mirror.
 - Use `.codex/docs/claude-to-codex-mapping.md` as the bidirectional format mapping reference and retain per-team mapping artifacts for later conversion work.
