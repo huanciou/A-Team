@@ -18,6 +18,15 @@ All generated team structures must follow this directory configuration:
 ```
 teams/{team-name}/
 ├── CLAUDE.md                         ← Team-wide instructions all agents must follow
+├── .worklog/                         ← Phase-level work documentation (created at runtime)
+│   └── {yyyymm}/
+│       └── {task-name}/
+│           ├── phase-1-{label}/
+│           │   ├── references.md     ← Sources consulted
+│           │   ├── findings.md       ← Key discoveries and analysis
+│           │   └── decisions.md      ← Decisions with rationale and evidence
+│           └── phase-{n}-{label}/
+│               └── ...
 └── .claude/
     ├── agents/
     │   ├── {coordinator}.md          ← Coordinator, in agents/ root directory
@@ -56,6 +65,7 @@ Content to include in CLAUDE.md:
 - Universal behavioral norms (e.g., communication language, output format)
 - Project-wide technical constraints (e.g., tech stack, coding standards)
 - Deployment mode instructions (subagent vs Agent Teams, see below)
+- Worklog and context management instructions (mandatory, see below)
 - `@path/to/file` imports to reference shared documents (e.g., `@README.md`, `@docs/architecture.md`). Imported files expand into context at launch. Relative paths resolve from the CLAUDE.md location. Maximum import depth is 5 levels.
 
 Content NOT to include in CLAUDE.md (put these in `rules/` instead):
@@ -70,6 +80,19 @@ Every generated CLAUDE.md must include a deployment mode section specifying how 
 
 - **Subagent mode**: Agents are invoked via the Task tool within a single session. Coordinator manages all delegation. Suitable for sequential workflows with clear handoffs.
 - **Agent Teams mode** (experimental): Agents run as independent Claude Code instances with shared task lists and direct messaging. Suitable for parallel workflows where agents need peer-to-peer communication. Requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` to be enabled.
+
+### Worklog and Context Management Section in CLAUDE.md
+
+Every generated CLAUDE.md must include a worklog and context management section that defines:
+
+1. **Worklog structure**: `.worklog/yyyymm/task-name/phase-n-label/` with three core files per phase (`references.md`, `findings.md`, `decisions.md`)
+2. **Coordinator dispatch rules**: Every Task dispatch must include the worklog path and upstream reference paths
+3. **Agent return format**: Agents must return structured summaries; full detail goes to the worklog
+4. **Phase-end archival**: Coordinator verifies worklog completeness before phase transitions
+
+The generated team's `rules/` directory must also include:
+- A **worklog rule** defining the `.worklog/` structure and evidence chain requirements
+- A **context management rule** defining task isolation, summary-based reporting, and worklog-based context recovery
 
 ### Path-Scoped Rules
 
@@ -101,6 +124,9 @@ paths:
 - Team root directory missing `CLAUDE.md` → Violation
 - `CLAUDE.md` placed inside `.claude/` instead of at team root → Violation
 - `CLAUDE.md` missing deployment mode section → Violation
+- `CLAUDE.md` missing worklog and context management section → Violation
+- Generated team missing worklog rule in `rules/` → Violation
+- Generated team missing context management rule in `rules/` → Violation
 - Coordinator .md appears in a subfolder → Violation
 - Non-coordinator agent placed directly in `agents/` root directory (same level as coordinator) → Violation
 - Skill exists directly as `.md` file instead of `{skill-name}/SKILL.md` format → Violation

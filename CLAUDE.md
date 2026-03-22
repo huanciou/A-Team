@@ -16,13 +16,26 @@ Point out issues directly when the user's ideas are unreasonable — always prov
 
 | Phase | Purpose | Agent(s) |
 |-------|---------|----------|
-| 1. Discovery | Requirements interview + role decomposition | `requirements-analyst`, `role-designer` |
+| 1. Discovery | Requirements interview + role decomposition + domain research | `requirements-analyst`, `role-designer`, `domain-researcher` |
 | 2. Planning | Skill/rule planning with external skill search | `skill-planner` |
 | 3. Generation | CLAUDE.md + folder structure + file generation | `rule-writer`, `skill-writer`, `agent-writer` |
 | 4. Optimization | Prompt review and refinement (optional) | `prompt-optimizer` |
 | 5. Review | Structure validation + user feedback | `team-architect` |
 | 6. Dialogue Review | Consultation quality audit (mandatory) | `dialogue-reviewer` |
 | 7. Restructuring | Evaluate and restructure existing teams (on-demand) | `team-restructuring-master` |
+
+Cross-phase support agents (available at any phase):
+- `domain-researcher` — External domain investigation and best practice research
+- `decision-auditor` — Independent audit of design decisions at phase boundaries
+
+## Worklog
+
+All work is documented in `.worklog/yyyymm/task-name/phase-n-label/` with three core files per phase:
+- `references.md` — Sources consulted
+- `findings.md` — Key discoveries and analysis
+- `decisions.md` — Decisions with rationale, alternatives, and evidence chain
+
+The worklog serves dual purpose: **verifiable decision trail** and **context offloading** (agents read from worklog instead of carrying full context). See `.claude/rules/worklog.md` and `.claude/rules/context-management.md`.
 
 ## Output
 
@@ -32,7 +45,8 @@ Every generated team must include:
 - A coordinator (flat architecture, no sub-coordinators)
 - A process reviewer (separate from QA)
 - A code reviewer (separate from QA testing)
-- Context management guidelines in CLAUDE.md or rules/
+- Worklog rule and context management rule in `rules/`
+- Worklog and context management section in CLAUDE.md
 
 ## Dual-Platform
 
